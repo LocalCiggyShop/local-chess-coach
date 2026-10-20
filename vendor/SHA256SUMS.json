@@ -1,0 +1,8 @@
+{
+  "vendor/chess/LICENSE": "0b3a3c2b4432a26bb18f9d06f5bba4de015bcc980306b7db28b06025495e2186",
+  "vendor/chess/chess.js": "76c7c34f0e2e9ab076521a5d6fe786a9cce537bb1b6f29d32a9c9970b5b232d2",
+  "vendor/stockfish/COPYING.txt": "0b383d5a63da644f628d99c33976ea6487ed89aaa59f0b3257992deac1171e6b",
+  "vendor/stockfish/stockfish-19-lite-single.js": "ccb130d7ff29408531c47d859a49f91d59d4f482d05a53eb1a3231a4f624c91a",
+  "vendor/stockfish/stockfish-19-lite-single.wasm": "ee4f115bdb2d32cadf96cada104a05b5ec257d7ad6f57582190b49bc71f096de",
+  "vendor/stockfish/stockfish.js-19.0.1-source.tar.gz": "a18aa8a871f5265014b110b3e07804ff3637899d2e189be6ded2b99e2c17a10e"
+}

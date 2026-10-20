@@ -1,0 +1,74 @@
+{
+  "manifest_version": 3,
+  "name": "Local Chess Coach",
+  "version": "1.0.0",
+  "description": "Local Stockfish suggestions with a compact learning panel for Chess.com and Lichess.",
+  "minimum_chrome_version": "116",
+  "permissions": [
+    "storage",
+    "offscreen",
+    "debugger"
+  ],
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "assets/icon16.png",
+      "48": "assets/icon48.png",
+      "128": "assets/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "assets/icon16.png",
+    "48": "assets/icon48.png",
+    "128": "assets/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.chess.com/*",
+        "https://chess.com/*",
+        "https://lichess.org/*"
+      ],
+      "js": [
+        "src/bridge.js"
+      ],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": [
+        "https://www.chess.com/*",
+        "https://chess.com/*",
+        "https://lichess.org/*"
+      ],
+      "js": [
+        "src/content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "src/position.js",
+        "src/adapters.js",
+        "src/panel.js",
+        "src/board-ui.js",
+        "src/play-state.js",
+        "vendor/chess/chess.js"
+      ],
+      "matches": [
+        "https://www.chess.com/*",
+        "https://chess.com/*",
+        "https://lichess.org/*"
+      ]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'none'; worker-src 'self'; connect-src 'self'"
+  }
+}
