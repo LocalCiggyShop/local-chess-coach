@@ -1,13 +1,7 @@
 import { Automation } from './automation.js';
+import { EngineConnection } from './engine-connection.js';
 const automation = new Automation(chrome);
-let creating;
-async function ensureEngine() {
-  const url = chrome.runtime.getURL('offscreen.html');
-  if ((await chrome.runtime.getContexts({ contextTypes: ['OFFSCREEN_DOCUMENT'], documentUrls: [url] })).length) return;
-  if (!creating) creating = chrome.offscreen.createDocument({ url: 'offscreen.html', reasons: ['WORKERS'],
-    justification: 'Run the bundled Stockfish WASM worker for local chess analysis.' }).finally(() => { creating = null; });
-  await creating;
-}
+const engine = new EngineConnection(chrome);
 const supported = url => /^https:\/\/(www\.)?(chess\.com|lichess\.org)\//.test(url || '');
 chrome.runtime.onMessage.addListener((message, sender, respond) => {
   if (sender.id !== chrome.runtime.id || message?.target !== 'background' || !sender.tab || sender.frameId !== 0 || !supported(sender.url)) return;
@@ -22,16 +16,15 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
     if (message.type === 'analyze') {
       const settings = await chrome.storage.local.get({ enabled: true });
       if (!settings.enabled) return { cancelled: true };
-      await ensureEngine();
-    } else if (!(await chrome.runtime.getContexts({ contextTypes: ['OFFSCREEN_DOCUMENT'] })).length) return { ok: true };
-    return chrome.runtime.sendMessage({ target: 'engine', type: message.type, tabId: sender.tab.id,
+    }
+    return engine.send({ target: 'engine', type: message.type, tabId: sender.tab.id,
       id: message.id, fen: message.fen, refresh: message.refresh === true });
   })().then(respond, error => respond({ error: error.message }));
   return true;
 });
 chrome.tabs.onRemoved.addListener(tabId => {
   automation.stop(tabId);
-  chrome.runtime.sendMessage({ target: 'engine', type: 'cancel', tabId }).catch(() => {});
+  engine.send({ target: 'engine', type: 'cancel', tabId }).catch(() => {});
 });
 chrome.tabs.onUpdated.addListener((tabId, change) => {
   if (change.status === 'loading' || change.url) automation.stop(tabId, 'Auto moves reset after navigation.');

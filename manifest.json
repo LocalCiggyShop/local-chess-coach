@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Local Chess Coach",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Local Stockfish suggestions with a compact learning panel for Chess.com and Lichess.",
   "minimum_chrome_version": "116",
   "permissions": [

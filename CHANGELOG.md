@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.1 — Connection fix
+
+- Fix “Could not establish connection. Receiving end does not exist.” when opening Chess.com or Lichess games.
+- Wait for the local engine's message listener before requesting analysis, including when its offscreen page is still loading.
+- Reconnect once if the engine disappears before receiving a request, with a clear Refresh prompt if startup fails.
+- Add delayed-startup and concurrent-request regression checks.
+
 ## 1.0.0 — First GitHub release
 
 - Manifest V3 extension for desktop Chrome and Brave on Chess.com and Lichess.

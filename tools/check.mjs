@@ -9,7 +9,7 @@ assert.ok(manifest.content_security_policy.extension_pages.includes("'wasm-unsaf
 assert.ok(!manifest.content_security_policy.extension_pages.includes("'unsafe-eval'"));
 const files = [manifest.background.service_worker, manifest.action.default_popup,
   ...Object.values(manifest.icons), ...manifest.content_scripts.flatMap(c => c.js),
-  ...manifest.web_accessible_resources.flatMap(r => r.resources), 'offscreen.html', 'src/offscreen.js', 'src/engine.js', 'src/automation.js'];
+  ...manifest.web_accessible_resources.flatMap(r => r.resources), 'offscreen.html', 'src/offscreen.js', 'src/engine.js', 'src/engine-connection.js', 'src/automation.js'];
 for (const file of files) await access(file);
 for (const [file, hash] of Object.entries(JSON.parse(await readFile('vendor/SHA256SUMS.json', 'utf8')))) {
   assert.equal(createHash('sha256').update(await readFile(file)).digest('hex'), hash, `Vendor checksum: ${file}`);
